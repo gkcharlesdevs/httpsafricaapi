@@ -46,18 +46,22 @@ app.use("/api/v1/users", users);
 // Error Handlers
 app.use(errorHandler);
 
-PORT = process.env.PORT || 5008;
+const options = {
+  key: fs.readFileSync("keys/server-key.pem"),
+  cert: fs.readFileSync("keys/server-cert.pem"),
+};
 
-const server = app.listen(
-  PORT,
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  )
-);
+PORT = process.env.PORT || 5007;
+
+const server = https.createServer(options, app);
+
+const unhandledError = server.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`.red);
   // Close server & exit process
-  // server.close(() => process.exit(1));
+  unhandledError.close(() => process.exit(1));
 });
