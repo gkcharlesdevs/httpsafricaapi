@@ -21,7 +21,6 @@ const sms = Africastalking.SMS;
 const options = {
   to: process.env.AFRICA_API_MESSAGE_TO.split(","), // in config.env enter the phone numbers in the format +23407030000000,+23407030000000,..
   from: process.env.AFRICA_API_MESSAGE_FROM,
-
   message: "I'm a lumberjack and its ok, I work all night and sleep all day",
 };
 
